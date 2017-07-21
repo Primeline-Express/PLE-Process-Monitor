@@ -40,7 +40,7 @@ Public Class PLEProcessMonitor
             CheckAzyra = False
         End Try
         lblLastAzyra.Text = DateTime.Now
-        AzyraRow("NextRun") = DateTime.Now.AddSeconds(5)
+        AzyraRow("NextRun") = DateTime.Now.AddMinutes(30)
         lblNextAzyra.Text = AzyraRow("NextRun").ToString
     End Function
     Public Sub AzyraChecker()
@@ -150,7 +150,7 @@ Public Class PLEProcessMonitor
         mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
         Activate()
         lblLastTimedData.Text = DateTime.Now
-        TimedMonitorRow("NextRun") = DateTime.Now.AddMinutes(60)
+        TimedMonitorRow("NextRun") = DateTime.Now.AddMinutes(59)
         lblNextTimedData.Text = TimedMonitorRow("NextRun").ToString
         Show()
         'Add update button colour here'
@@ -168,19 +168,25 @@ Public Class PLEProcessMonitor
     End Function
     Private Sub DoStuffThread()
         If AzyraRow("NextRun") < Now Then
+            BtnAzyra.BackColor = Color.DarkRed
             Call AzyraChecker()
+        Else   
+            btnAzyra.BackColor = Color.DarkGreen
         End If
         If TimedMonitorRow("NextRun") < Now Then
+            btnTimedMonitor.BackColor = Color.DarkRed
             Call ExportTimedMonitorData()
+        Else
+            btnTimedMonitor.BackColor = Color.DarkGreen
         End If
     End Sub
 
     Private Sub FirstRun()
         AzyraRow = tblReport.Rows.Add(New Object() {"AzyraChecker", "05:48"})
-        TimedMonitorRow = tblReport.Rows.Add(New Object() {"ExportTimedMonitorData", "15:32"})
+        TimedMonitorRow = tblReport.Rows.Add(New Object() {"ExportTimedMonitorData", "05:55"})
         lblNextAzyra.Text = AzyraRow("NextRun").ToString
         lblNextTimedData.Text = TimedMonitorRow("NextRun").ToString
-        Dim TimerCheck As System.Timers.Timer = New Timer((2 * 60000))
+        Dim TimerCheck As System.Timers.Timer = New Timer((0.5 * 60000))
         AddHandler TimerCheck.Elapsed, AddressOf CheckTimedEvent
         TimerCheck.Enabled = True
         Call AzyraChecker()
