@@ -153,6 +153,8 @@ Public Class PLEProcessMonitor
         TimedMonitorRow("NextRun") = DateTime.Now.AddMinutes(60)
         lblNextTimedData.Text = TimedMonitorRow("NextRun").ToString
         Show()
+        'Add update button colour here'
+        BtnTimedMonitor.Backcolor = Color.DarkGreen
     End Sub
     Public Function AddWorkingDays(ByVal DateIn As DateTime,
         ByVal ShiftDate As Integer) As DateTime
